@@ -12,6 +12,8 @@
 
 @interface ViewController ()
 
+@property (strong, nonatomic) IBOutlet UIView *backgroundView;
+
 @end
 
 @implementation ViewController
@@ -26,6 +28,11 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (IBAction)startCapturingTapped:(UIButton *)sender {
+    [self setupImageCaptureDevice];
+}
+
 
 - (void)setupImageCaptureDevice {
     
@@ -69,8 +76,10 @@
     
     //Create Preview Layer for Capture Session and add as sublayer
     AVCaptureVideoPreviewLayer *previewLayer = [AVCaptureVideoPreviewLayer layerWithSession:session];
-    previewLayer.frame = self.view.bounds;
-    [self.view.layer addSublayer:previewLayer];
+    previewLayer.frame = self.backgroundView.bounds;
+    [self.backgroundView.layer addSublayer:previewLayer];
+    
+    [session startRunning];
     
 }
 
