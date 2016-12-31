@@ -160,6 +160,7 @@
 				TargetAttributes = {
 					9B9AA49B1E18491F0006BFFB = {
 						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 9MHWYND2T8;
 						ProvisioningStyle = Automatic;
 					};
 					9B9AA4B41E18491F0006BFFB = {
@@ -349,6 +350,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 9MHWYND2T8;
 				INFOPLIST_FILE = DocumentCapture/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mattmoncur.DocumentCapture;
@@ -360,6 +362,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 9MHWYND2T8;
 				INFOPLIST_FILE = DocumentCapture/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mattmoncur.DocumentCapture;
