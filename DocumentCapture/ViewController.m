@@ -48,24 +48,24 @@
     switch (count) {
         case 0:
             session.sessionPreset = AVCaptureSessionPresetPhoto;
-            sender.titleLabel.text = @"Photo";
+            [sender setTitle:@"Photo" forState:UIControlStateNormal];
             break;
         case 1:
             session.sessionPreset = AVCaptureSessionPresetLow;
-            sender.titleLabel.text = @"Low";
+            [sender setTitle:@"Low" forState:UIControlStateNormal];
             break;
         case 2:
             session.sessionPreset = AVCaptureSessionPresetMedium;
-            sender.titleLabel.text = @"Medium";
+            [sender setTitle:@"Medium" forState:UIControlStateNormal];
             break;
         case 3:
             session.sessionPreset = AVCaptureSessionPresetHigh;
-            sender.titleLabel.text = @"High";
+            [sender setTitle:@"High" forState:UIControlStateNormal];
             break;
         default:
             count = 0;
             session.sessionPreset = AVCaptureSessionPresetPhoto;
-            sender.titleLabel.text = @"Photo";
+            [sender setTitle:@"Photo" forState:UIControlStateNormal];
             break;
     }
     count ++;
