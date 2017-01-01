@@ -42,14 +42,24 @@
                                             <action selector="stopCapturingTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Bt1-g5-Xgd"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k82-8a-OX8">
+                                        <rect key="frame" x="8" y="28" width="50" height="30"/>
+                                        <state key="normal" title="Default"/>
+                                        <connections>
+                                            <action selector="defaultConfig:" destination="BYZ-38-t0r" eventType="touchUpInside" id="9yr-F5-Qmr"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="y1r-pH-6jl" firstAttribute="centerX" secondItem="tZg-Hu-1zd" secondAttribute="centerX" id="3mj-bi-7WM"/>
                                     <constraint firstItem="EwW-l3-S9e" firstAttribute="top" secondItem="tZg-Hu-1zd" secondAttribute="top" constant="27" id="9Cs-Xq-4Sc"/>
                                     <constraint firstItem="y1r-pH-6jl" firstAttribute="centerY" secondItem="tZg-Hu-1zd" secondAttribute="centerY" id="9sf-wR-1aa"/>
+                                    <constraint firstAttribute="bottom" secondItem="k82-8a-OX8" secondAttribute="bottom" constant="27" id="Er1-RU-uSe"/>
                                     <constraint firstAttribute="bottom" secondItem="EwW-l3-S9e" secondAttribute="bottom" constant="28" id="FGD-jN-Gcm"/>
                                     <constraint firstAttribute="trailing" secondItem="EwW-l3-S9e" secondAttribute="trailing" constant="8" id="VX5-ET-HQc"/>
+                                    <constraint firstItem="k82-8a-OX8" firstAttribute="leading" secondItem="tZg-Hu-1zd" secondAttribute="leading" constant="8" id="erF-en-9pB"/>
+                                    <constraint firstItem="k82-8a-OX8" firstAttribute="top" secondItem="tZg-Hu-1zd" secondAttribute="top" constant="28" id="eyg-Ha-xIL"/>
                                     <constraint firstAttribute="height" constant="85" id="tjw-tK-If5"/>
                                 </constraints>
                             </view>
