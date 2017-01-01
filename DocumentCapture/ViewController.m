@@ -10,9 +10,11 @@
 #import <AVFoundation/AVFoundation.h>
 
 
-@interface ViewController ()
+@interface ViewController () {
+    AVCaptureSession *session;
+}
 
-@property (strong, nonatomic) IBOutlet UIView *backgroundView;
+@property (weak, nonatomic) IBOutlet UIView *videoPreviewView;
 
 @end
 
@@ -33,10 +35,13 @@
     [self setupImageCaptureDevice];
 }
 
+- (IBAction)stopCapturingTapped:(UIButton *)sender {
+    [session stopRunning];
+}
 
 - (void)setupImageCaptureDevice {
     
-    AVCaptureSession *session = [AVCaptureSession new];
+    session = [AVCaptureSession new];
     
     AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
     
@@ -76,8 +81,8 @@
     
     //Create Preview Layer for Capture Session and add as sublayer
     AVCaptureVideoPreviewLayer *previewLayer = [AVCaptureVideoPreviewLayer layerWithSession:session];
-    previewLayer.frame = self.backgroundView.bounds;
-    [self.backgroundView.layer addSublayer:previewLayer];
+    previewLayer.frame = self.videoPreviewView.bounds;
+    [self.videoPreviewView.layer addSublayer:previewLayer];
     
     [session startRunning];
     
