@@ -7,15 +7,11 @@
 //
 
 #import "ViewController.h"
-#import <AVFoundation/AVFoundation.h>
 
 
 @interface ViewController () {
-    AVCaptureSession *session;
-    int count;
+    GPUImageVideoCamera *videoCamera;
 }
-
-@property (weak, nonatomic) IBOutlet UIView *videoPreviewView;
 
 @end
 
@@ -23,104 +19,44 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    count = 0;
-    // Do any additional setup after loading the view, typically from a nib.
 }
 
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)viewDidAppear:(BOOL)animated {
+    [self setupGPUCameraForLiveStream];
 }
 
-- (IBAction)startCapturingTapped:(UIButton *)sender {
-    [self setupImageCaptureDevice];
+-(void)setupGPUCameraForLiveStream {
+    //Initialize Video Camera
+    videoCamera = [[GPUImageVideoCamera alloc] initWithSessionPreset:AVCaptureSessionPreset640x480 cameraPosition:AVCaptureDevicePositionBack];
+    videoCamera.outputImageOrientation = UIInterfaceOrientationPortrait;
+    
+    //Create Hough Line Detector
+    GPUImageHoughTransformLineDetector *houghLineDetector = [[GPUImageHoughTransformLineDetector alloc] init];
+    [houghLineDetector setLineDetectionThreshold:0.60];
+    //Create Line Generator
+    GPUImageLineGenerator *lineGenerator = [[GPUImageLineGenerator alloc] init];
+    [lineGenerator forceProcessingAtSize:CGSizeMake(480.0, 640.0)];
+    [lineGenerator setLineColorRed:1.0 green:0.0 blue:0.0];
+    //Render from lines detected in Hough Detector
+    [houghLineDetector setLinesDetectedBlock:^(GLfloat* lineArray, NSUInteger linesDetected, CMTime frameTime){
+        [lineGenerator renderLinesFromArray:lineArray count:linesDetected frameTime:frameTime];
+    }];
+    //Create a Gamma Filter
+    GPUImageGammaFilter *gammaFilter = [[GPUImageGammaFilter alloc] init];
+    //Create a Alpha Blend Filter
+    GPUImageAlphaBlendFilter *blendFilter = [[GPUImageAlphaBlendFilter alloc] init];
+    [blendFilter forceProcessingAtSize:CGSizeMake(480.0, 640.0)];
+    
+    //Add Filters in proper order
+    [videoCamera addTarget:gammaFilter];
+//    [gammaFilter addTarget:blendFilter];
+//    [lineGenerator addTarget:blendFilter];
+//    [blendFilter addTarget:self.videoPreviewView];
+    
+    [gammaFilter addTarget:self.videoPreviewView];
+    
+    //Start Capturing Video
+    [videoCamera startCameraCapture];
 }
-
-- (IBAction)stopCapturingTapped:(UIButton *)sender {
-    [session stopRunning];
-    self.videoPreviewView.layer.sublayers = nil;
-//    NSLog(@"%lu",(unsigned long)outputs.count);
-//    [session removeOutput:session.outputs[0]];
-}
-
-- (IBAction)defaultConfig:(UIButton *)sender {
-    switch (count) {
-        case 0:
-            session.sessionPreset = AVCaptureSessionPresetPhoto;
-            [sender setTitle:@"Photo" forState:UIControlStateNormal];
-            break;
-        case 1:
-            session.sessionPreset = AVCaptureSessionPresetLow;
-            [sender setTitle:@"Low" forState:UIControlStateNormal];
-            break;
-        case 2:
-            session.sessionPreset = AVCaptureSessionPresetMedium;
-            [sender setTitle:@"Medium" forState:UIControlStateNormal];
-            break;
-        case 3:
-            session.sessionPreset = AVCaptureSessionPresetHigh;
-            [sender setTitle:@"High" forState:UIControlStateNormal];
-            break;
-        default:
-            count = 0;
-            session.sessionPreset = AVCaptureSessionPresetPhoto;
-            [sender setTitle:@"Photo" forState:UIControlStateNormal];
-            break;
-    }
-    count ++;
-}
-
-- (void)setupImageCaptureDevice {
-    
-    session = [AVCaptureSession new];
-    
-    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
-    
-    NSArray *deviceTypes = [NSArray arrayWithObject:AVCaptureDeviceTypeBuiltInWideAngleCamera];
-    AVCaptureDeviceDiscoverySession *discovery = [AVCaptureDeviceDiscoverySession discoverySessionWithDeviceTypes:deviceTypes
-                                                           mediaType:AVMediaTypeVideo
-                                                            position:AVCaptureDevicePositionBack];
-    
-    NSArray *devices = discovery.devices;
-    
-    
-    if (devices.count <= 0 && authStatus != AVAuthorizationStatusDenied && authStatus != AVAuthorizationStatusRestricted) {
-        NSLog(@"No devices found");
-        return;
-    }
-    
-    if (authStatus == AVAuthorizationStatusNotDetermined) {
-        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
-            if (granted) {
-                //proceed
-            } else {
-                //Throw error or sum sum
-            }
-        }];
-    }
-    
-    
-    AVCaptureDevice *device = devices[0];
-    NSLog(@"%@", device.localizedName);
-    
-    AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:device error:nil];
-
-    //Add device input to Capture Session
-    if ([session canAddInput:input]) {
-        [session addInput:input];
-    }
-    
-    //Create Preview Layer for Capture Session and add as sublayer
-    AVCaptureVideoPreviewLayer *previewLayer = [AVCaptureVideoPreviewLayer layerWithSession:session];
-    previewLayer.frame = self.videoPreviewView.bounds;
-    [self.videoPreviewView.layer addSublayer:previewLayer];
-    
-
-    
-    [session startRunning];
-    
-}
-
 
 @end

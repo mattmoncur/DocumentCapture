@@ -8,8 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+#import <AVFoundation/AVFoundation.h>
+#import "GPUImage.h"
+
 @interface ViewController : UIViewController
 
+@property (weak, nonatomic) IBOutlet GPUImageView *videoPreviewView;
 
 @end
 
